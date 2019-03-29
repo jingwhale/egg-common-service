@@ -4,13 +4,9 @@ const Controller = require('egg-cloud').Controller;
 
 class HomeController extends Controller {
   async index() {
-    const ctx = this.ctx;
-    ctx.body = await ctx.proxy.userService.echoUser({
-      id: 123456,
-      name: '宗羽',
-      address: '蚂蚁 C 空间',
-      salary: 100000000,
-    });
+    this.ctx.body = `hi, egg-RESTfulAPI!
+    A optimized Node.js RESTful API Server Template based on egg.js.
+    https://github.com/jingwhale/egg-common-service`
   }
 }
 
