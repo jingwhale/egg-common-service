@@ -7,3 +7,12 @@ exports.rpc = {
   // client: {},
   // server: {},
 };
+
+exports.security = {
+  domainWhiteList: [ 'http://localhost:8000' ],
+};
+
+exports.cors = {
+  origin: '*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+};

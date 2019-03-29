@@ -42,7 +42,7 @@ class ScreenshotService extends Service {
         backData = {
             data: this.base64img(path)
         }
-        return this.base64img(path)
+        return backData
     }
 }
 

@@ -19,9 +19,9 @@ class ScreentshotController extends Controller {
       const payload = ctx.request.body || {}
       // 调用 Service 进行业务处理
       const res = await service.screenshot.screenshot(payload)
-      ctx.body = res;
+      // ctx.body = res;
        // 设置响应内容和响应状态码
-    // ctx.helper.success({ctx, res})
+    ctx.helper.success({ctx, res})
   }
 }
 

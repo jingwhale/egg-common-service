@@ -21,8 +21,9 @@
     "autod": "autod"
   },
   "dependencies": {
-    "egg-scripts": "^2.10.0",
     "egg-cloud": "^0.2.0",
+    "egg-cors": "^2.2.0",
+    "egg-scripts": "^2.10.0",
     "puppeteer": "^1.13.0"
   },
   "devDependencies": {
