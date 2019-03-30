@@ -8,4 +8,4 @@ exports.cors = {
 exports.validate = {
     enable: true,
     package: 'egg-validate',
-  };
+};
