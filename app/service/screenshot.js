@@ -40,14 +40,15 @@ class ScreenshotService extends Service {
         
         await page.goto(payload.url);
         part = page;
+        var partId = payload.partId;
         if(payload.isPart){
-            if(payload.partType===1){
+            if(payload.partType===1){//自定义
                 console.log(payload.partType)
-            }else{
-                var partNode = partTypeDefalt[payload.partType];
-                var partArr = await page.$$(partNode);
-                part = partArr[0];
+            }else{//默认
+                partId = partTypeDefalt[payload.partType];
             }
+            var partArr = await page.$$(partId);
+            part = partArr[0];
         }
         
         // //调用页面内Dom对象的screenshot 方法进行截图
