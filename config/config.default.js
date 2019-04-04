@@ -23,12 +23,20 @@ module.exports = appInfo => {
     // server: {},
   };
 
+
+  config.cluster = {
+      listen: {
+          port: 7001,
+          hostname: ''
+      }
+  };
+
   config.security = {
     csrf: {
       enable: false,
     },
     domainWhiteList: [ 'http://localhost:8000','http://whalexplorer.coding.me' ],
-  }
+  };
 
   config.cors = {
     origin: '*',

@@ -7,7 +7,7 @@
     "framework": "egg-cloud"
   },
   "scripts": {
-    "start": "npm run init && egg-scripts start --daemon --title=egg-server-egg-common-service",
+    "start": "egg-scripts start --daemon --title=egg-server-egg-common-service",
     "stop": "egg-scripts stop --title=egg-server-egg-common-service",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
@@ -25,7 +25,7 @@
     "egg-cors": "^2.2.0",
     "egg-scripts": "^2.10.0",
     "egg-validate": "^2.0.2",
-    "images": "^3.0.2",
+    "image-size": "^0.7.3",
     "puppeteer": "^1.13.0"
   },
   "devDependencies": {
