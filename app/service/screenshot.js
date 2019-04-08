@@ -7,11 +7,14 @@ const path = require('path');
 const sizeOf = require('image-size');
 const APPKEY = "jingwhale";
 const partTypeDefalt = {
-    githubcommits:".commits-listing"
+    githubcommits:".commits-listing",
+    tencentcommits:".commits-1uQ"
 };
 var part = "";
 
 var newPage = "";
+
+var pathUrl = 'screenshot.png';
 
 class ScreenshotService extends Service {
     async base64img(file){//生成base64
@@ -24,7 +27,7 @@ class ScreenshotService extends Service {
             height: imageData.height
         }
         backData.base64 = new Buffer(data).toString('base64');
-        
+
         return backData;
     }
 
@@ -35,8 +38,13 @@ class ScreenshotService extends Service {
         }
         const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
         const page = await browser.newPage();
-        var path = 'screenshot.png';
-        
+        page.setDefaultNavigationTimeout(0);
+
+        await page.setViewport({
+            width: 1020,
+            height: 2000
+        });
+
         await page.goto(payload.url);
 
         var partId = payload.partId;
@@ -44,29 +52,25 @@ class ScreenshotService extends Service {
             if(payload.partType===1){//自定义
                 console.log(payload.partType)
             }else{//默认
-                partId = partTypeDefalt[payload.partType];
+                partId = 'div'+partTypeDefalt[payload.partType];
             }
-            var partArr = await page.$$(partId);
-            part = partArr[0];
+            await page.waitFor(partId);
+            part = await page.$(partId);
         }
 
-        newPage = payload.isPart ? part:page;
+        newPage = payload.isPart ? part : page;
 
         // //调用页面内Dom对象的screenshot 方法进行截图
         try { // 截图 
-            await newPage.screenshot({path: path, type: 'png'}).catch(err => {
-                console.log(err);
-                ctx.throw(404, '截图失败')
-            });
-        }catch (e) { 
-            console.log('执行异常'); 
+            await newPage.screenshot({path: pathUrl, type: 'png'})
+        }catch (e) {
+            console.log('执行异常');
             ctx.throw(404, '执行异常')
-        } finally { 
-            await page.close();
+        } finally {
             await browser.close();
         }
-        var base64imgData = this.base64img(path)
-        
+        var base64imgData = this.base64img(pathUrl)
+
         return base64imgData
     }
 }
