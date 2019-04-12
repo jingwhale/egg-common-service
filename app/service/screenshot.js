@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
-const Service = require('egg').Service
-const puppeteer = require('puppeteer')
+const Service = require('egg').Service;
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 const sizeOf = require('image-size');
@@ -10,6 +10,8 @@ const partTypeDefalt = {
     githubcommits:".commits-listing",
     tencentcommits:".commits-1uQ"
 };
+var partId = "";
+
 var part = "";
 
 var newPage = "";
@@ -38,41 +40,56 @@ class ScreenshotService extends Service {
         }
         const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
         const page = await browser.newPage();
-        page.setDefaultNavigationTimeout(0);
 
-        await page.setViewport({
-            width: 1020,
-            height: 2000
-        });
-
-        await page.goto(payload.url);
-
-        var partId = payload.partId;
         if(payload.isPart){
-            if(payload.partType===1){//自定义
-                console.log(payload.partType)
+            await page.goto(payload.url);
+            page.setDefaultNavigationTimeout(0);
+        }else{
+            await page.goto(payload.url);
+        }
+
+        if(payload.isPart){
+            if(payload.partType==1){//自定义
+                partId = payload.partId;
             }else{//默认
-                partId = 'div'+partTypeDefalt[payload.partType];
+                partId = partTypeDefalt[payload.partType];
             }
-            await page.waitFor(partId);
+            await page.waitForSelector(partId);
             part = await page.$(partId);
+            if(partId == ".commits-1uQ"){
+                await page.waitForSelector('.container-3My');
+                await page.evaluate(() => {
+                    document.querySelector('.container-3My').style = "display:none";
+                })
+            }
         }
 
         newPage = payload.isPart ? part : page;
 
         // //调用页面内Dom对象的screenshot 方法进行截图
-        try { // 截图 
-            await newPage.screenshot({path: pathUrl, type: 'png'})
+        try { // 截图
+            var pageOptions = {
+                path: pathUrl,
+                type: 'png',
+                fullPage: true,
+                omitBackground: true
+            };
+            var partOptions = {
+                path: pathUrl,
+                type: 'png'
+            }
+            var option = payload.isPart ? partOptions : pageOptions;
+            await newPage.screenshot(option)
         }catch (e) {
             console.log('执行异常');
             ctx.throw(404, '执行异常')
         } finally {
             await browser.close();
         }
-        var base64imgData = this.base64img(pathUrl)
+        var base64imgData = this.base64img(pathUrl);
 
         return base64imgData
     }
 }
 
-module.exports = ScreenshotService
+module.exports = ScreenshotService;
