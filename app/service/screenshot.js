@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-const Service = require('egg').Service;
-const puppeteer = require('puppeteer');
+const Service = require('egg').Service
+const puppeteer = require('puppeteer')
 const fs = require('fs');
 const path = require('path');
 const sizeOf = require('image-size');
@@ -17,6 +17,7 @@ var part = "";
 var newPage = "";
 
 var pathUrl = 'screenshot.png';
+
 
 class ScreenshotService extends Service {
     async base64img(file){//生成base64
@@ -45,7 +46,7 @@ class ScreenshotService extends Service {
             await page.goto(payload.url);
             page.setDefaultNavigationTimeout(0);
         }else{
-            await page.goto(payload.url);
+            await page.goto(payload.url,{waitUntil: 'networkidle0'});
         }
 
         if(payload.isPart){
@@ -86,7 +87,7 @@ class ScreenshotService extends Service {
         } finally {
             await browser.close();
         }
-        var base64imgData = this.base64img(pathUrl);
+        var base64imgData = this.base64img(pathUrl)
 
         return base64imgData
     }
