@@ -57,10 +57,10 @@ class ScreenshotService extends Service {
             }
             await page.waitForSelector(partId);
             part = await page.$(partId);
-            if(partId == ".commits-1uQ"){
-                await page.waitForSelector('.container-3My');
-                await page.evaluate(() => {
-                    document.querySelector('.container-3My').style = "display:none";
+          	if(partId == ".commits-1uQ"){
+               await page.waitForSelector("header");
+               await page.evaluate(() => {
+                     document.querySelector("header").style = "display:none";
                 })
             }
         }
@@ -68,7 +68,7 @@ class ScreenshotService extends Service {
         newPage = payload.isPart ? part : page;
 
         // //调用页面内Dom对象的screenshot 方法进行截图
-        try { // 截图
+        try { // 截图 
             var pageOptions = {
                 path: pathUrl,
                 type: 'png',
